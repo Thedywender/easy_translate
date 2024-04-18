@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request
-from src.models.language_model import LanguageModel
+from models.language_model import LanguageModel
 from deep_translator import GoogleTranslator
 
 language = Blueprint("language", __name__)
@@ -40,4 +40,25 @@ def translate_query():
         translate_from=translate_from,
         translate_to=translate_to,
         translated=translated,
+    )
+
+
+@language.post("/reverse")
+def reverse_translate():
+    languages = LanguageModel.list_dicts()
+    text_to_translate = request.form["text-to-translate"]
+    translate_from = request.form["translate-from"]
+    translate_to = request.form["translate-to"]
+
+    translated = GoogleTranslator(
+        source=translate_from, target=translate_to
+    ).translate(text_to_translate)
+
+    return render_template(
+        "index.html",
+        languages=languages,
+        text_to_translate=translated,
+        translate_from=translate_to,
+        translate_to=translate_from,
+        translated=text_to_translate,
     )

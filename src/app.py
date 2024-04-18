@@ -1,7 +1,7 @@
 from flask import Flask
 
 from controllers.admin_controller import admin_controller
-from src.controllers.translate_controller import language
+from controllers.translate_controller import language
 
 from os import environ
 from waitress import serve
